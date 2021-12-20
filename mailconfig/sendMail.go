@@ -7,7 +7,7 @@ import (
 	"text/template"
 )
 
-func SendMail(m []map[string]interface{}) {
+func SendMail(m interface{}, index bool) {
 
 	// Sender data.
 	from := "devesh.tiwari12141@gmail.com"
@@ -16,6 +16,7 @@ func SendMail(m []map[string]interface{}) {
 	// Receiver email address.
 	to := []string{
 		"devesh.tiwari444@gmail.com",
+		// "ashutosh2890@gmail.com",
 	}
 
 	// smtp server configuration.
@@ -31,14 +32,18 @@ func SendMail(m []map[string]interface{}) {
 	}
 	var body bytes.Buffer
 
-	mimeHeaders := "MIME-version: 1.0;\nContent-Type: text/html; charset=\"UTF-8\";\n\n"
-	body.Write([]byte(fmt.Sprintf("Subject: Found Arbitrage \n%s\n\n", mimeHeaders)))
 	var b struct {
 		Name    string
-		Message []map[string]interface{}
+		Message interface{}
 	}
-	b.Name = "SBIN"
+	if index {
+		b.Name = "Index"
+	} else {
+		b.Name = "Stock"
+	}
 	b.Message = m
+	mimeHeaders := "MIME-version: 1.0;\nContent-Type: text/html; charset=\"UTF-8\";\n\n"
+	body.Write([]byte(fmt.Sprintf("Subject: Found Arbitrage %v \n%s\n\n", b.Name, mimeHeaders)))
 	err = t.Execute(&body, b)
 	if err != nil {
 		fmt.Println(err.Error())
@@ -49,5 +54,5 @@ func SendMail(m []map[string]interface{}) {
 		fmt.Println(err)
 		return
 	}
-	fmt.Println("Email Sent!")
+	fmt.Println("Email Sent!", b.Name)
 }

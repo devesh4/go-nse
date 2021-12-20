@@ -1,36 +1,28 @@
-<!-- template.html -->
 <!DOCTYPE html>
 <html>
 <body>
     <h3>Name:</h3><span>{{.Name}}</span><br/><br/>
-    {{ range $_, $value := .Message }}
-        {{ range $k,$v := $value }}
+    {{ range .Message }}
+        <strong>{{.Symbol}} {{.Option}} Difference : {{.Difference}} Signal : {{.Signal}}</strong>
         <table>
             <colgroup>
                 <col span="1" style="width: 40%;">
-                <col span="1" style="width: 40%;">
-                <col span="1" style="width: 20%;">                
+                <col span="1" style="width: 40%;">                             
             </colgroup>
             <tr>
               <th>Strike</th>
-              <th>LTP</th>
-              <th>Diff</th>
-            </tr>
-            {{ range $idx,$ltp := $v }}
-            <tr>
-            {{ range $strikePrice,$price := $ltp }}
-              <td style="text-align:center">{{$strikePrice}}</td>
-              <td style="text-align:center">{{$price}}</td>              
-            {{end}}
-            {{if (eq $idx 1)}}
-            <td style="text-align:center; font-weight: bold;">{{$k}}</td>
-            {{end}}            
-            </tr>
-            {{end}}
-            
+              <th>LTP</th>              
+            </tr>            
+              {{ range $idx,$price := .Q }}
+              <tr>
+                {{ range $strikePrice,$ltp := $price }}
+                  <td style="text-align:center">{{$strikePrice}}</td>
+                  <td style="text-align:center">{{$ltp}}</td>                                
+                {{end}}
+              </tr>
+              {{end}}                                      
         </table>           
-        <br> 
-        {{end}}
+        <br>        
     {{ end }}
     
 </body>
